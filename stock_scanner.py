@@ -277,6 +277,62 @@ class TechnicalAnalysisAgent(BaseAgent):
         return state
 
 class ReportingAgent(BaseAgent):
+    def generate_screening_checklist(self, stock: dict) -> str:
+        """Generate a screening criteria checklist for a single stock."""
+        # Extract values
+        name = stock.get('company_name', '')
+        symbol = stock.get('symbol', '')
+        market_cap = stock.get('market_cap', 0)
+        price = stock.get('current_price', 0)
+        high_max_250 = stock.get('high_max_250', 0)
+        ema_50 = stock.get('ema_50', 0)
+        ema_21 = stock.get('ema_21', 0)
+        pct_change = stock.get('pct_change', 0)
+        volume_ema_50 = stock.get('volume_ema_50', 0)
+        close_min_260 = stock.get('close_min_260', 0)
+        # Calculated values
+        meets = lambda cond: '✔️' if cond else '❌'
+        # Market Cap: $300M–$10B
+        mc_req = "$300M–$10B"
+        mc_val = f"${market_cap/1e9:.1f}B" if market_cap else "N/A"
+        mc_meets = meets(3e8 <= market_cap < 1e10)
+        # Price ≥ 75% of 250-day high
+        p75 = high_max_250 * 0.75 if high_max_250 else 0
+        p75_req = f"≥${p75:.2f} (75% of ${high_max_250:.2f})" if high_max_250 else "N/A"
+        p75_meets = meets(price >= p75 and high_max_250)
+        # Price ≥ $20
+        p20_meets = meets(price >= 20)
+        # Price ≥ 50-day EMA
+        ema50_meets = meets(price >= ema_50 and ema_50)
+        # Price ≥ 21-day EMA
+        ema21_meets = meets(price >= ema_21 and ema_21)
+        # Daily % change between -3% and 5%
+        pct_req = "-3% < Change ≤ 5%"
+        pct_meets = meets(-3 < pct_change <= 5)
+        # 50-day avg dollar volume ≥ $75M
+        vol_req = "$75,000,000"
+        vol_val = f"~${volume_ema_50*price:,.0f}" if volume_ema_50 and price else "N/A"
+        vol_meets = meets(volume_ema_50 and (volume_ema_50*price) >= 75000000)
+        # Price ≥ 2x 260-day low
+        low2x = close_min_260 * 2 if close_min_260 else 0
+        low2x_req = f"≥${low2x:.2f} (2 × ${close_min_260:.2f})" if close_min_260 else "N/A"
+        low2x_meets = meets(price >= low2x and close_min_260)
+        # Build checklist table
+        checklist = [
+            ["Criteria", "Requirement", f"{symbol} Value", "Meets?"],
+            ["Market Cap (Small/Mid)", mc_req, mc_val, mc_meets],
+            ["Current Price ≥ 75% of 250-day High", p75_req, f"${price:.2f}", p75_meets],
+            ["Current Price ≥ $20", "$20", f"${price:.2f}", p20_meets],
+            ["Current Price ≥ 50-day EMA", f"${ema_50:.2f}", f"${price:.2f}", ema50_meets],
+            ["Current Price ≥ 21-day EMA", f"${ema_21:.2f}", f"${price:.2f}", ema21_meets],
+            ["Daily % Change", pct_req, f"{pct_change:.2f}%", pct_meets],
+            ["50-day Avg Dollar Volume ≥ $75M", vol_req, vol_val, vol_meets],
+            ["Current Price ≥ 2x 260-day Low", low2x_req, f"${price:.2f}", low2x_meets],
+        ]
+        # Format as markdown table
+        lines = ["| " + " | ".join(row) + " |" for row in checklist]
+        lines.insert(1, "|---|---|---|---|")
+        return f"\nScreening Criteria Checklist for {name} ({symbol}):\n" + "\n".join(lines)
     """Agent responsible for generating final reports and outputs"""
     
     def __init__(self):
@@ -358,6 +414,10 @@ class ReportingAgent(BaseAgent):
             final_df = pd.DataFrame(columns=['StockName', 'Symbol', '% Chg', 'Price', 'Volume', 'Sector'])
         # Generate detailed report
         detailed_report = self.create_detailed_report(state)
+        # Add screening checklist for each final result
+        if state['filtered_stocks']:
+            for stock in state['filtered_stocks']:
+                detailed_report += "\n\n" + self.generate_screening_checklist(stock)
         # Save results
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         csv_filename = f"multi_agent_stock_scan_{timestamp}.csv"
