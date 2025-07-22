@@ -338,15 +338,13 @@ class ReportingAgent(BaseAgent):
         # Create DataFrame from filtered stocks
         if state['filtered_stocks']:
             results_data = []
-            for i, stock in enumerate(state['filtered_stocks'], 1):
+            for stock in state['filtered_stocks']:
                 # Convert all values to native Python types
                 def to_native(val):
                     if isinstance(val, (np.generic, np.ndarray)):
                         return val.item() if hasattr(val, 'item') else val.tolist()
                     return val
                 results_data.append({
-                    'rownum': int(i),
-                    'Market': str(state['market_name']),
                     'StockName': str(stock['company_name']),
                     'Symbol': str(stock['symbol']),
                     '% Chg': float(round(float(stock['pct_change']), 2)),
@@ -357,7 +355,7 @@ class ReportingAgent(BaseAgent):
             final_df = pd.DataFrame(results_data)
             final_df = final_df.sort_values(by='% Chg', ascending=False)
         else:
-            final_df = pd.DataFrame(columns=['rownum', 'Market', 'StockName', 'Symbol', '% Chg', 'Price', 'Volume', 'Sector'])
+            final_df = pd.DataFrame(columns=['StockName', 'Symbol', '% Chg', 'Price', 'Volume', 'Sector'])
         # Generate detailed report
         detailed_report = self.create_detailed_report(state)
         # Save results
