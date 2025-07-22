@@ -1,0 +1,49 @@
+# Ignore Python cache and environment files
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Ignore Jupyter and IPython files
+.ipynb_checkpoints/
+
+# Ignore data and output files
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.parquet
+*.h5
+*.hdf5
+*.feather
+*.jsonl
+*.zip
+*.tar.gz
+*.log
+*.out
+*.bak
+*.tmp
+
+# Ignore virtual environments
+venv/
+.env/
+.envrc
+.env.*
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore VSCode settings
+.vscode/
+
+# Ignore notebook checkpoints
+*.checkpoint
+
+# Ignore results and reports
+multi_agent_stock_scan_*.csv
+scan_report_*.txt
