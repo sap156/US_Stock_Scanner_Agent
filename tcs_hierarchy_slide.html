@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCS Hierarchy - PPT Slide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Calibri', Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .slide {
+            width: 1280px;
+            height: 720px;
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide-header {
+            margin-bottom: 40px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 600;
+            color: #e91e63;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .hierarchy-section {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        .org-chart {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .level {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 60px;
+            width: 100%;
+            position: relative;
+        }
+
+        .position-box {
+            background: #4db6ac;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            position: relative;
+            min-width: 280px;
+            margin: 0 20px;
+        }
+
+        .position-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .position-title {
+            font-size: 13px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .description-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #495057;
+            text-align: left;
+            max-width: 350px;
+        }
+
+        .level-2 {
+            justify-content: space-around;
+            gap: 80px;
+        }
+
+        /* Connecting lines */
+        .connector {
+            position: absolute;
+            background: #4db6ac;
+            z-index: 1;
+        }
+
+        .vertical-line {
+            width: 3px;
+            height: 40px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .horizontal-line {
+            height: 3px;
+            width: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .level-1 .vertical-line {
+            height: 30px;
+        }
+
+        /* Level 2 connectors */
+        .level-2-connector {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            height: 3px;
+            background: #4db6ac;
+        }
+
+        .level-2-vertical-left {
+            position: absolute;
+            top: -30px;
+            left: 25%;
+            width: 3px;
+            height: 30px;
+            background: #4db6ac;
+        }
+
+        .level-2-vertical-right {
+            position: absolute;
+            top: -30px;
+            right: 25%;
+            width: 3px;
+            height: 30px;
+            background: #4db6ac;
+        }
+
+        .slide-footer {
+            text-align: right;
+            font-size: 10px;
+            color: #95a5a6;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">Resource Composition</h1>
+            <div class="hierarchy-section">
+                <h2 class="section-title">TCS Hierarchy</h2>
+            </div>
+        </div>
+
+        <div class="org-chart">
+            <!-- Level 1 - Top Management -->
+            <div class="level level-1">
+                <div class="position-box">
+                    <div class="position-name">Byju Kollon</div>
+                    <div class="position-title">(Sub ISU Head – Manager TCS-USAA Account)</div>
+                    <div class="connector vertical-line"></div>
+                </div>
+            </div>
+
+            <!-- Level 2 - Client Partner -->
+            <div class="level level-1">
+                <div class="position-box">
+                    <div class="position-name">Prasanna Balasubramanian</div>
+                    <div class="position-title">(Client Partner)</div>
+                    <div class="description-box">
+                        Handles entries Data and Analytics portfolio across all lines of business – P&C, EDAO, Life and Bank
+                    </div>
+                    <div class="connector vertical-line"></div>
+                </div>
+            </div>
+
+            <!-- Level 3 - Managers -->
+            <div class="level level-2">
+                <div class="level-2-connector"></div>
+                <div class="level-2-vertical-left"></div>
+                <div class="level-2-vertical-right"></div>
+                
+                <div class="position-box">
+                    <div class="position-name">Amit Sharma</div>
+                    <div class="position-title">(Engagement Manager)</div>
+                    <div class="description-box">
+                        POC for EDAO- Data Engineering<br>
+                        (Manages – Delivery, Sales and Operations)
+                    </div>
+                </div>
+
+                <div class="position-box">
+                    <div class="position-name">Jaikanth Dandamudi</div>
+                    <div class="position-title">(Business Relationship Manager)</div>
+                    <div class="description-box">
+                        Relationship Manager :- EDAO- Data Engineering, Bank Data and Life Data<br>
+                        (Manages – Relationship and Sales)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-footer">
+            TCS Hierarchy Structure | Confidential
+        </div>
+    </div>
+</body>
+</html>
